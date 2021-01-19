@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <head>
     <link rel="stylesheet" href="styles.css">
+    <script src="quizGame.js"></script>
 </head>
 
 <body>
     <header id="appTitle">
         <h1>QUIZ GAME</h1>
     </header>
-    <div class="propertiesDiv">
-        <form action="" class="gamePropertiesFrom">
+
+    <div class="progress">
+        <div class="progress-value"></div>
+    </div>
+    
+    <div class="propertiesDiv" id="properties">
+        <form action="" class="propertiesForm">
             <div class="propertySection">
                 <label>Number of questions</label>
                 <select id="quantity" name="quantity">
@@ -36,7 +42,44 @@
                 </select>
             </div>
 
-            <input type="submit" value="PLAY">
+            <input class="btn" type="submit" value="PLAY">
+        </form>
+    </div>
+
+    <div class="questionDiv">
+        <div class="timer">
+            0:10
+        </div>
+        <hr>
+        <div class="question"> 
+            Pytanie?
+        </div>
+        <hr>
+        <form action="">
+            <div class="answerGroup">
+                <input type="radio" id="a" name="answer" value="a">
+                <label for="a">A</label>
+            </div>
+
+            <div class="answerGroup">
+                <input type="radio" id="b" name="answer" value="b">
+                <label for="b">B</label>
+            </div>
+
+            <div class="answerGroup">
+                <input type="radio" id="c" name="answer" value="c">
+                <label for="c">C</label>
+            </div>
+
+            <div class="answerGroup">
+                <input type="radio" id="d" name="answer" value="d">
+                <label for="d">D</label>
+            </div>
+
+            <div class="buttons">
+                <input class="btn" type="submit" value="Answer">
+                <button class="btn" id="skipButton">Skip</button>
+            </div>
         </form>
     </div>
 </body>
