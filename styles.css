@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url('https://fonts.googleapis.com/css?family=Poller+One');
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(to right, #6f03fc, #b392de);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+#appTitle {
+    font-family: 'Poller One', sans-serif;
+    max-height: 200px;
+    cursor: default;
+    margin-bottom: 2.5vh;
+}
+#appTitle>h1 {
+    font-size: 80px;
+    color: black;
+    font-weight: 500;
+    position: relative;
+}
+
+.gamePropertiesFrom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    padding: 30px 15px;
+    border-radius: 10px;
+    /* width: 100%; */
+    width: 350px;
+}
+
+.propertySection {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    width: 100%;
+    max-width: 230px;
+}
+
+.propertySection > select {
+    width: 230px;
+    padding: 8px;
+    font-size: 13px;
+    border: 1px solid #e4eff8;
+    background-color: #e4eff8;
+    border-radius: 15px; 
+}
+
+.propertySection > label {
+    color: #999;
+    font-size: 15px;
+    margin-bottom: 3px;
+    margin-left: 8px;
+}
+
+.gamePropertiesFrom > input[type="submit"] {
+    padding: 15px;
+    width: 180px;
+    border: none;
+    border-radius: 50px;
+    color: #f2ebf5;
+    cursor: pointer;
+    background-color: #b392de;
+    border: unset;
+    align-self: center;
+    margin-top: 15px;
+    font-size: 15px;
+    letter-spacing: 2px;
+}
+
+input[type="submit"]:hover {
+    background-color: #6f03fc;
+    transition: .5s;
+}
