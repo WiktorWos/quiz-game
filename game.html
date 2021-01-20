@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <head>
     <link rel="stylesheet" href="styles.css">
-    <script src="quizGame.js"></script>
 </head>
 
 <body>
@@ -9,54 +8,45 @@
         <h1>QUIZ GAME</h1>
     </header>
 
-    <div class="progress">
-        <div class="progress-value"></div>
+    <div id="progressBar" class="progress hide">
+        <div class="progress-value" id="progressValue"></div>
     </div>
     
     <div class="propertiesDiv" id="properties">
-        <form action="" class="propertiesForm">
+        <form class="propertiesForm" name="propertiesForm">
             <div class="propertySection">
                 <label>Number of questions</label>
-                <select id="quantity" name="quantity">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
+                <select id="quantity" name="quantity"></select>
             </div>
 
             <div class="propertySection">
                 <label>Category</label>
-                <select id="category" name="category">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
+                <select id="category" name="category"></select>
             </div>
             
             <div class="propertySection">
                 <label>Difficulty</label>
                 <select id="difficulty" name="difficulty">
-                    <option value="1">easy</option>
-                    <option value="2">medium</option>
-                    <option value="3">hard</option>
+                    <option value="easy">easy</option>
+                    <option value="medium">medium</option>
+                    <option value="hard">hard</option>
                 </select>
             </div>
 
-            <input class="btn" type="submit" value="PLAY">
         </form>
+        <button class="btn" id="playButton">PLAY</button>
     </div>
 
-    <div class="questionDiv">
-        <div class="timer">
+    <div id="questions" class="questionDiv hide">
+        <div class="timer" id="timer">
             0:10
         </div>
         <hr>
-        <div class="question"> 
-            Pytanie?
+        <div class="question" id="question"> 
         </div>
         <hr>
-        <form action="">
-            <div class="answerGroup">
+        <form name = "questionForm">
+            <!-- <div class="answerGroup">
                 <input type="radio" id="a" name="answer" value="a">
                 <label for="a">A</label>
             </div>
@@ -74,12 +64,13 @@
             <div class="answerGroup">
                 <input type="radio" id="d" name="answer" value="d">
                 <label for="d">D</label>
-            </div>
-
-            <div class="buttons">
-                <input class="btn" type="submit" value="Answer">
-                <button class="btn" id="skipButton">Skip</button>
-            </div>
+            </div> -->
         </form>
+        <div class="buttons">
+            <button class="btn" id="answerButton">Answer</button>
+            <button class="btn" id="skipButton">Skip</button>
+        </div>
     </div>
+
+    <script src="dist/bundle.js"></script>
 </body>
