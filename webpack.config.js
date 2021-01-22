@@ -7,5 +7,5 @@ module.exports = {
         filename: "bundle.js",
         path: resolve(__dirname, "dist")
     },
-    devtool: 'eval-source-map'
+    devtool: 'eval-source-map',
 }

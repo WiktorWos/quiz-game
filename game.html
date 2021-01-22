@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 <head>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -22,14 +23,16 @@
 
                 <div class="propertySection">
                     <label>Category</label>
-                    <select id="category" name="category"></select>
+                    <select id="category" name="category">
+                        <option value="">any</option>
+                    </select>
                 </div>
                 
                 <div class="propertySection">
                     <label>Difficulty</label>
                     <select id="difficulty" name="difficulty">
                         <option value="easy">easy</option>
-                        <option value="medium">medium</option>
+                        <option value="medium" selected="selected">medium</option>
                         <option value="hard">hard</option>
                     </select>
                 </div>
@@ -69,31 +72,6 @@
         </div>
 
         <div id="answersSummary" class="hide">
-
-            <!-- <div class="summaryDiv" id="answerDetails">
-                <div class="question" id="question"> 
-                    Pytanie?
-                </div>
-                <hr>
-                <div class="question" id="question"> 
-                    Odpowiedź
-                </div>
-                <hr>
-                <div class="question" id="question"> 
-                    Poprawna odp
-                </div>
-                <hr>
-                <div class="summaryInfoDiv" id="summaryInfo">
-                    <div class="scoreSection">
-                        <label>Score:</label>
-                        <div class="score" id="score">10</div>
-                    </div>
-                    <div class="scoreSection">
-                        <label>Time:</label>
-                        <div class="score" id="totalTime">3:10</div>
-                    </div>
-                </div>
-            </div> -->
         </div>
 
     </div>

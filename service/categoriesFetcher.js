@@ -6,6 +6,9 @@ export default class CategoriesFetcher {
             .then(data=>{
                 return data.trivia_categories;
             })
-            .catch(error => alert(error));
+            .catch(error => {
+                alert(error);
+                return null;
+            });
     }
 }

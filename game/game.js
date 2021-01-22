@@ -18,18 +18,18 @@ export default class Game {
         this.gameDetails = {};
     }
 
-    async startGame() {
+    startGame() {
         this.userInterface.populateCategories();
         this.userInterface.populateQuestionNums();
     }
 
-    async playAgain() {
+    playAgain() {
         this.prepareToNewGame();
         this.submitProperties();
         this.userInterface.prepareQuestionsScreenWhenReplay();
     }
 
-    async startNewGame() {
+    startNewGame() {
         this.prepareToNewGame();
         this.userInterface.preparePropertiesScreen();
     }
@@ -75,7 +75,6 @@ export default class Game {
 
     startTimer() {
         this.questionTimer = new Timer();
-        return timer;
     }
 
     startVisibleTimer() {

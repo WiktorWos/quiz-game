@@ -181,3 +181,29 @@ hr {
     font-size: 28px;
     margin: auto;
 }
+
+@media only screen and (max-width: 530px) {
+    #appTitle > h1{
+        font-size: 50px;
+    }
+
+    .propertiesDiv, .questionDiv, .summaryDiv {
+        width: 320px;
+    }
+
+    .progress{
+        width: 350px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    .btn {
+        margin-right: 0;
+    }
+
+    #skipButton {
+        margin-left: 0;
+    }
+}
