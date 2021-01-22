@@ -5,6 +5,7 @@ export default class QuestionsFetcher {
             .then(response => response.json()) 
             .then(data=>{
                 return data.results;
-            });
+            })
+            .catch(error => alert(error));
     }
 }

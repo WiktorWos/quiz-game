@@ -5,6 +5,7 @@ export default class CategoriesFetcher {
             .then(response => response.json()) 
             .then(data=>{
                 return data.trivia_categories;
-            });
+            })
+            .catch(error => alert(error));
     }
 }

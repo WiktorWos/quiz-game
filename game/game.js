@@ -3,6 +3,7 @@ import QuestionsFetcher from "../service/questionsFetcher";
 import Question from "../model/question";
 import UserInterface from "../ui/userInterface";
 import Timer from "./timer";
+import GameDetails from "../model/gameDetails";
 
 const propertiesForm = document.forms["propertiesForm"];
 const bonusTime = 5000;
@@ -14,15 +15,32 @@ export default class Game {
         this.userInterface = new UserInterface();
         this.questionFetcher = new QuestionsFetcher();
         this.questionTimer = {};
-        this.totalScore = 0;
+        this.gameDetails = {};
     }
 
     async startGame() {
         this.userInterface.populateCategories();
         this.userInterface.populateQuestionNums();
     }
+
+    async playAgain() {
+        this.prepareToNewGame();
+        this.submitProperties();
+        this.userInterface.prepareQuestionsScreenWhenReplay();
+    }
+
+    async startNewGame() {
+        this.prepareToNewGame();
+        this.userInterface.preparePropertiesScreen();
+    }
+
+    prepareToNewGame() {
+        this.questions = [];
+        this.currentQuestionNum = -1;
+    }
         
     async submitProperties() {
+        this.gameDetails = new GameDetails();
         const questionsNum = propertiesForm["quantity"].value;
         const category = propertiesForm["category"].value;
         const difficulty = propertiesForm["difficulty"].value;
@@ -45,7 +63,14 @@ export default class Game {
             this.currentQuestionNum ++;
             this.userInterface.showQuestion(this.questions[this.currentQuestionNum], this.questions.length, this.currentQuestionNum);
             this.startTimer();
+            this.prepareVisibleTimer();
         }
+    }
+
+    prepareVisibleTimer() {
+        this.userInterface.timerSec = 1;
+        const timerDiv = document.getElementById("timer");
+        timerDiv.innerHTML = "0:0";
     }
 
     startTimer() {
@@ -53,23 +78,52 @@ export default class Game {
         return timer;
     }
 
-    answer() {
-        const answer = this.userInterface.getSelectedRadioValue();
-        const time = this.questionTimer.getMilisecondsFromStart();
-        const correctAnswer = this.questions[this.currentQuestionNum].correctAnswer;
-        const score = this.calculateScore(answer, correctAnswer, time);
-        this.totalScore += score;
-        const answerDetails = new AnswerDetails(time, true, answer, score);
-        this.questions[this.currentQuestionNum].setAnswerDetails(answerDetails);
-        this.loadNextQuestion();
+    startVisibleTimer() {
+        this.userInterface.startQuestionTimer();
     }
 
-    skip() {
-        const score = 0;
+    answer(isAnswered) {
+        const answer = this.getAnswer(isAnswered);
+        const isAnswerNotChecked = (isAnswered && answer =="");
+        if(!isAnswerNotChecked) {
+            this.setAnswerDetails(isAnswered, answer);
+            this.setTotalScore();
+            this.loadNextScreen();
+        }
+    }
+
+    setAnswerDetails(isAnswered, answer) {
         const time = this.questionTimer.getMilisecondsFromStart();
-        const answerDetails = new AnswerDetails(time, false, "", score);
+        const correctAnswer = this.questions[this.currentQuestionNum].correctAnswer;
+        let score = this.getScore(isAnswered, answer, correctAnswer, time);
+        const answerDetails = new AnswerDetails(time, isAnswered, answer, score);
         this.questions[this.currentQuestionNum].setAnswerDetails(answerDetails);
-        this.loadNextQuestion();
+    }
+
+    getAnswer(isAnswered) {
+        let answer = "";
+        if(isAnswered) answer = this.userInterface.getSelectedRadioValue();
+        return answer;
+    }
+
+    getScore(isAnswered, answer, correctAnswer, time) {
+        let score = 0;
+        if(isAnswered) score = this.calculateScore(answer, correctAnswer, time);
+        return score;
+    }
+
+    setTotalScore() {
+        const currentQuestion = this.questions[this.currentQuestionNum];
+        const currentQuestionScore = currentQuestion.answerDetails.score;
+        this.gameDetails.totalScore += currentQuestionScore;
+    }
+
+    loadNextScreen() {
+        const lastQuestionNum = this.questions.length - 1;
+        if(this.currentQuestionNum < lastQuestionNum) this.loadNextQuestion();
+        else {
+            this.userInterface.prepareSummaryScreen(this.questions, this.gameDetails);
+        }
     }
 
     calculateScore(answer, correctAnswer, time) {

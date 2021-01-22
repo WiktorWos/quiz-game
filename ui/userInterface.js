@@ -4,13 +4,17 @@ const categories = document.getElementById("category");
 const questionsNum = document.getElementById("quantity");
 const properties = document.getElementById("properties");
 const progressBar = document.getElementById("progressBar");
-const questions = document.getElementById("questions");
+const questionsDiv = document.getElementById("questions");
 const questionDiv = document.getElementById("question");
+const summaryDiv = document.getElementById("summary");
+const summaryAnswersDiv = document.getElementById("answersSummary");
 const questionForm = document.forms["questionForm"];
+const timerDiv = document.getElementById("timer");
 
 export default class UserInterface {
     constructor() {
         this.categoriesFetcher = new CategoriesFetcher();
+        this.timerSec = 1;
     }
 
     async populateCategories() {
@@ -33,10 +37,32 @@ export default class UserInterface {
         }
     }
 
+    async preparePropertiesScreen() {
+        properties.classList.remove("hide");
+        summaryDiv.classList.add("hide");
+        summaryAnswersDiv.classList.add("hide");
+        summaryAnswersDiv.innerHTML = "";
+    }
+
     async prepareQuestionScreen() {
         properties.classList.add("hide");
         progressBar.classList.remove("hide");
         questions.classList.remove("hide");
+    }
+
+    async prepareQuestionsScreenWhenReplay() {
+        summaryDiv.classList.add("hide");
+        summaryAnswersDiv.classList.add("hide");
+        summaryAnswersDiv.innerHTML = "";
+    }
+
+    async prepareSummaryScreen(questions, gameDetails) {
+        progressBar.classList.add("hide");
+        questionsDiv.classList.add("hide");
+        summaryDiv.classList.remove("hide");
+        summaryAnswersDiv.classList.remove("hide");
+        this.createAnswersSummary(questions);
+        this.displayGameDetails(gameDetails);
     }
 
     async showQuestion(question, questionNum, currentQuestionNum) {
@@ -48,11 +74,9 @@ export default class UserInterface {
     }
 
     increseProgressBar(questionNum, currentQuestionNum) {
-        console.log(questionNum + " " + currentQuestionNum);
         const progressValue = document.getElementById("progressValue");
         const calculatedWidth = (currentQuestionNum / questionNum) * 100;
         const widthValue = calculatedWidth + "%";
-        console.log(widthValue);
         progressValue.style.width = widthValue;
     }
 
@@ -65,24 +89,25 @@ export default class UserInterface {
         }
     }
 
-    createRadioBox(answer) {
+    createRadioBox(answer, id) {
         let radiobox = document.createElement('input');
+        radiobox.id = id;
         radiobox.type = 'radio';
         radiobox.value = answer;
         radiobox.name = "answer"
         return radiobox;
     }
 
-    createLabel(answer) {
-        let label = document.createElement('label')
-        label.htmlFor = 'answer';
-        let description = document.createTextNode(answer);
+    createLabel(answer, id) {
+        const label = document.createElement('label')
+        label.htmlFor = id;
+        const description = document.createTextNode(answer);
         label.appendChild(description);
         return label;
     }
 
     createAnswerGroup(radiobox, label) {
-        let answerGroup = document.createElement("div");
+        const answerGroup = document.createElement("div");
         answerGroup.classList.add("answerGroup");
         
         answerGroup.appendChild(radiobox);
@@ -91,26 +116,101 @@ export default class UserInterface {
     }
 
     getAllAnswers(question) {
-        let allAnswers = question.incorrectAnswers;
+        const allAnswers = question.incorrectAnswers;
         allAnswers.push(question.correctAnswer);
         this.shuffleArray(allAnswers);
         return allAnswers;
     }
 
     createAnswers(allAnswers) {
+        let radioboxId = 0;
         allAnswers.forEach(answer => {
-            let radiobox = this.createRadioBox(answer);
-            let label = this.createLabel(answer);
-            let answerGroup = this.createAnswerGroup(radiobox, label);
+            const radiobox = this.createRadioBox(answer, radioboxId);
+            const label = this.createLabel(answer, radioboxId);
+            const answerGroup = this.createAnswerGroup(radiobox, label);
             questionForm.appendChild(answerGroup);
+            radioboxId++;
         });
     }
 
     getSelectedRadioValue() {
-        let selectedAnswer;
+        let selectedAnswer = "";
         questionForm["answer"].forEach(answer => {
             if(answer.checked) selectedAnswer = answer.value;
         });
+        if(selectedAnswer === "") alert("Please select an answer or skip the question.")
         return selectedAnswer;
+    }
+
+    displayGameDetails(gameDetails) {
+        const totalScore = document.getElementById("totalScore");
+        const totalTime = document.getElementById("totalTime");
+        const timeInMilis = gameDetails.totalTimer.getMilisecondsFromStart();
+        const timeInsSec = Math.floor(timeInMilis/1000);
+        totalScore.innerHTML = gameDetails.totalScore;
+        totalTime.innerHTML = `${Math.floor(timeInsSec/60)}:${timeInsSec%60}`;
+    }
+
+    createAnswersSummary(questions) {
+        questions.forEach(question => {
+            const scoreSectionScore = this.createScoreSection("Score:", question.answerDetails.score);
+            const answerTime = question.answerDetails.answerTime;
+            const scoreSectionTime = this.createScoreSection("Time:", `${Math.floor(answerTime/1000)}s`);
+            const summaryInfo = this.createSummaryInfo(scoreSectionScore, scoreSectionTime);
+            const answerDetails = this.createAnswerDetails(summaryInfo, question);
+            summaryAnswersDiv.appendChild(answerDetails);
+        });
+        
+    }
+
+    createAnswerDetails(summaryInfo, question) {
+        const answerDetails = this.getDiv("summaryDiv", "");
+        answerDetails.appendChild(this.getDiv("question", question.question));
+        answerDetails.appendChild(this.getHr());
+        answerDetails.appendChild(this.getDiv("question", "Your answer: " + question.answerDetails.answer));
+        answerDetails.appendChild(this.getHr());
+        answerDetails.appendChild(this.getDiv("question", "Correct answer: " + question.correctAnswer));
+        answerDetails.appendChild(this.getHr());
+        answerDetails.appendChild(summaryInfo);
+        return answerDetails;
+    }
+
+    createSummaryInfo(sectionScore, sectionTime) {
+        const summaryInfo = this.getDiv("summaryInfoDiv", "");
+        summaryInfo.appendChild(sectionScore);
+        summaryInfo.appendChild(sectionTime);
+        return summaryInfo;
+    }
+
+    createScoreSection(labelName, value) {
+        const label = this.getLabel(labelName);
+        const valueDiv = this.getDiv("answerScore", value);
+        const scoreSection = this.getDiv("scoreSection", "");
+        scoreSection.appendChild(label);
+        scoreSection.appendChild(valueDiv);
+        return scoreSection;
+    }
+
+    getHr() {
+        return document.createElement("hr");
+    }
+
+    getDiv(className, innerHTML) {
+        const div = document.createElement("div");
+        div.classList.add(className);
+        div.innerHTML = innerHTML;
+        return div;
+    }
+
+    getLabel(innerHTML) {
+        const label = document.createElement("label");
+        label.innerHTML = innerHTML;
+        return label;
+    }
+
+    startQuestionTimer() {
+        const minutes = Math.floor(this.timerSec/60);
+        timerDiv.innerHTML = minutes + ":" + this.timerSec%60;
+        this.timerSec ++;
     }
 }

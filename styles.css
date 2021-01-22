@@ -12,6 +12,15 @@ body {
     margin: 0;
 }
 
+#wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position:absolute;
+    top: 0;
+}
+
 #appTitle {
     font-family: 'Poller One', sans-serif;
     max-height: 200px;
@@ -37,7 +46,7 @@ body {
     width: 350px;
 }
 
-.propertySection {
+.propertySection, .scoreSection{
     display: flex;
     flex-direction: column;
     margin-top: 10px;
@@ -61,6 +70,10 @@ body {
     margin-left: 8px;
 }
 
+.scoreSection > label {
+    margin: auto;
+}
+
 .btn {
     padding: 15px;
     width: 180px;
@@ -74,6 +87,8 @@ body {
     margin-top: 15px;
     font-size: 15px;
     letter-spacing: 2px;
+    margin-right: 5px;
+    outline: none;
 }
 
 .btn:hover {
@@ -93,7 +108,7 @@ body {
     padding-bottom: 5px;
 }
 
-.questionDiv {
+.questionDiv, .summaryDiv {
     display: flex;
     flex-direction: column;
     background-color: #fff;
@@ -101,6 +116,7 @@ body {
     border-radius: 10px;
     /* width: 100%; */
     width: 450px;
+    margin-bottom: 20px;
 }
 
 hr {
@@ -110,11 +126,17 @@ hr {
     background-color: #333;
 }
 
-.buttons {
+.buttons, .summaryInfoDiv {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+}
+
+.summaryInfoDiv {
+    width: 60%;
+    justify-content: space-between;
+    margin: auto;
 }
 
 #skipButton {
@@ -124,6 +146,15 @@ hr {
 .timer {
     font-size: 30px;
     margin: auto;
+}
+
+.score {
+    font-size: 50px;
+    margin: auto;
+}
+
+.scoreSection {
+    padding: 20px;
 }
 
 .progress {
@@ -144,4 +175,9 @@ hr {
     border-radius: 50px;
     background: #fff;
     height: 18px;
+}
+
+.answerScore {
+    font-size: 28px;
+    margin: auto;
 }
